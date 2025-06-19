@@ -13,6 +13,20 @@ runs:
     with:
       neovim: true
 
+  - name: Setup Nvim-treesitter
+    uses: actions/checkout@v4
+    with:
+      repository: nvim-treesitter/nvim-treesitter
+      path: nvim-treesitter
+
+  - name: Symlink nvim-tresitter to XDG_DATA_HOME
+    run: |
+      mkdir -p "$XDG_DATA_HOME"
+      ln -s "$GITHUB_WORKSPACE/nvim-tresitter" "$XDG_DATA_HOME/nvim-treesitter"
+    shell: bash
+    env:
+      XDG_DATA_HOME: /home/runner/.local/share/nvim
+
   - name: Setup Node.js
     uses: actions/setup-node@v4
     with:

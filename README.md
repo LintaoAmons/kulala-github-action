@@ -16,7 +16,7 @@ Kulala is swahili for "rest" or "relax".
 
 It allows you to make HTTP requests from within Neovim, CLI and CI/CD pipelines.
 
-Check our main [repo](https://github.com/mistweaverco/kulala.nvim) and [documentation](https://neovim.getkulala.net/docs/) for more information.
+Check our main [repo](https://github.com/mistweaverco/kulala.nvim) and [documentation](https://neovim.getkulala.net/docs/usage/cli-ci) for more information.
 
 </div>
 
