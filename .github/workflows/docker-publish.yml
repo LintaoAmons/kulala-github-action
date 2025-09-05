@@ -45,8 +45,24 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         continue-on-error: true
 
-      - name: Extract metadata
+      - name: Extract metadata (GitHub Container Registry)
         id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Extract metadata (with Docker Hub)
+        if: ${{ secrets.DOCKERHUB_USERNAME != '' }}
+        id: meta-dockerhub
         uses: docker/metadata-action@v5
         with:
           images: |
@@ -67,8 +83,8 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-dockerhub.outputs.tags || steps.meta.outputs.tags }}
+          labels: ${{ steps.meta-dockerhub.outputs.labels || steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
