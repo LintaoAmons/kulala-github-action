@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  kulala-cli:
+    build: .
+    image: kulala-cli:latest
+    volumes:
+      - ./:/workspace
+    environment:
+      - COLUMNS=120
+    # Example commands - uncomment one to use
+    # command: api.http
+    # command: api.http -e prod -v report
+    # command: tests/ --list
+    # command: api.http -n "Login Request" -v headers_body
