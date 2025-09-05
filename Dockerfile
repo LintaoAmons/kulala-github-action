@@ -38,12 +38,17 @@ RUN ARCH=$(dpkg --print-architecture) && \
     chmod +x /usr/local/bin/websocat
 
 # Install Neovim
-RUN wget -q https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
-    tar xzf nvim-linux64.tar.gz && \
-    mv nvim-linux64/bin/nvim /usr/local/bin/ && \
-    mv nvim-linux64/lib /usr/local/ && \
-    mv nvim-linux64/share /usr/local/ && \
-    rm -rf nvim-linux64*
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then \
+        wget -q https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
+        tar xzf nvim-linux64.tar.gz && \
+        mv nvim-linux64/bin/nvim /usr/local/bin/ && \
+        mv nvim-linux64/lib /usr/local/ && \
+        mv nvim-linux64/share /usr/local/ && \
+        rm -rf nvim-linux64*; \
+    else \
+        apt-get update && apt-get install -y neovim && rm -rf /var/lib/apt/lists/*; \
+    fi
 
 # Set up Neovim config directory
 ENV XDG_CONFIG_HOME=/root/.config
