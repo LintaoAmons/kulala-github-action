@@ -1,0 +1,13 @@
+.git
+.gitignore
+*.md
+action.yml
+assets/
+logo.png
+logo.svg
+.DS_Store
+*.swp
+*.swo
+*~
+node_modules/
+npm-debug.log
