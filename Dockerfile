@@ -42,9 +42,9 @@ RUN ARCH=$(dpkg --print-architecture) && \
     if [ "$ARCH" = "amd64" ]; then \
         curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-linux64.tar.gz && \
         tar xzf nvim-linux64.tar.gz && \
-        mv nvim-linux64/bin/nvim /usr/local/bin/ && \
-        mv nvim-linux64/lib /usr/local/ && \
-        mv nvim-linux64/share /usr/local/ && \
+        cp -r nvim-linux64/bin/* /usr/local/bin/ && \
+        cp -r nvim-linux64/lib/* /usr/local/lib/ && \
+        cp -r nvim-linux64/share/* /usr/local/share/ && \
         rm -rf nvim-linux64*; \
     else \
         apt-get update && apt-get install -y neovim && rm -rf /var/lib/apt/lists/*; \
