@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     jq \
-    grpcurl \
     nodejs \
     npm \
     python3 \
@@ -21,8 +20,21 @@ RUN apt-get update && apt-get install -y \
     fd-find \
     && rm -rf /var/lib/apt/lists/*
 
+# Install grpcurl (using go install method)
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then GRPC_ARCH="x86_64"; elif [ "$ARCH" = "arm64" ]; then GRPC_ARCH="arm64"; fi && \
+    wget -q https://github.com/fullstorydev/grpcurl/releases/download/v1.9.1/grpcurl_1.9.1_linux_${GRPC_ARCH}.tar.gz -O /tmp/grpcurl.tar.gz && \
+    tar -xzf /tmp/grpcurl.tar.gz -C /usr/local/bin grpcurl && \
+    rm /tmp/grpcurl.tar.gz && \
+    chmod +x /usr/local/bin/grpcurl
+
 # Install websocat for WebSocket support
-RUN wget -q https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl -O /usr/local/bin/websocat && \
+RUN ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then \
+        wget -q https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl -O /usr/local/bin/websocat; \
+    elif [ "$ARCH" = "arm64" ]; then \
+        wget -q https://github.com/vi/websocat/releases/latest/download/websocat.aarch64-unknown-linux-musl -O /usr/local/bin/websocat; \
+    fi && \
     chmod +x /usr/local/bin/websocat
 
 # Install Neovim
