@@ -37,10 +37,10 @@ RUN ARCH=$(dpkg --print-architecture) && \
     fi && \
     chmod +x /usr/local/bin/websocat
 
-# Install Neovim
+# Install Neovim (use specific version for stability)
 RUN ARCH=$(dpkg --print-architecture) && \
     if [ "$ARCH" = "amd64" ]; then \
-        wget -q https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
+        curl -LO https://github.com/neovim/neovim/releases/download/v0.10.2/nvim-linux64.tar.gz && \
         tar xzf nvim-linux64.tar.gz && \
         mv nvim-linux64/bin/nvim /usr/local/bin/ && \
         mv nvim-linux64/lib /usr/local/ && \
